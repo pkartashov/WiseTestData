@@ -2,7 +2,8 @@ import networkx as nx
 from dataio import *
 import random
 import string
-import api
+import rstr
+#import api
 
 from allpairspy import AllPairs
 from faker import Faker
@@ -57,26 +58,55 @@ def generate_test_data(rules, rows, fields):
     t = {'': '',
     'address': 'f.address()',
     'automotive': 'f.automotive()',
-    'bank': 'f.bank()',
-    'barcode': 'f.barcode()',
+    'android_platform_token': 'f.android_platform_token',
+    'ascii_free_email': 'f.ascii_free_email',
+    'bban': 'f.bban()',
     'color': 'f.color()',
     'company': 'f.company()',
-    'credit_card': 'f.credit_card()',
-    'currency': 'f.currency()',
+    'company_email': 'f.company_email()',
+    'coordinate': 'f.coordinate()',
+    'credit_card_number': 'f.credit_card_number()',
+    'credit_card_expire': 'f.credit_card_expire()',
+    'credit_card_provider': 'f.credit_card_provider()',
+    'credit_card_security_code': 'f.credit_card_security_code()',
+    'currency_code': 'f.currency_code()',
+    'date': 'f.date()',
     'date_time': 'f.date_time()',
-    'file': 'f.file()',
-    'geo': 'f.geo()',
-    'internet': 'f.internet()',
-    'isbn': 'f.isbn()',
+    'day_of_week': 'f.day_of_week()',
+    'Empty': '',
+    'file_name': 'f.file_name()',
+    'first_name': 'f.first_name()',
+    'future_date': 'f.future_date()',
+    'ios_platform_token': 'f.ios_platform_token()',
+    'ipv4': 'f.ipv4()',
+    'isbm': 'f.isbm()',
     'job': 'f.job()',
-    'lorem': 'f.lorem()',
-    'misc': 'f.misc()',
+    'language_code': 'f.language_code()',
     'last_name': 'f.last_name()',
+    'license_plate': 'f.license_plate()',
+    'linux_platform_token': 'f.linux_platform_token()',
+    'mac_platform_token': 'f.mac_platform_token()',
+    'name': 'f.name()',
+    'name_female': 'f.name_female()',
+    'name_male': 'f.name_male()',
+    'past_datetime': 'f.past_datetime()',
     'phone_number': 'f.phone_number()',
-    'profile': 'f.profile()',
-    'python': 'f.python()',
+    'prefix': 'f.prefix()',
+    'pricetag': 'f.pricetag()',
+    'random_int': 'f.random_int()',
+    'random_number': 'f.random_number()',
+    'RandomString': '',
+    'RegExp': '',
+    'safe_color_name': 'f.safe_color_name()',
     'ssn': 'f.ssn()',
-    'user_agent': 'f.user_agent()' }
+    'suffix': 'f.suffix()',
+    'swift': 'f.swift()',
+    'time': 'f.time()',
+    'timezone': 'f.timezone()',
+    'url': 'f.url()',
+    'user_agent': 'f.user_agent()',
+    'windows_platform_token': 'f.windows_platform_token()',
+    'year': 'f.year()',}
 
     #for j in range(len(rules)):
     #    d[0].append(rules[j][0])
@@ -85,18 +115,28 @@ def generate_test_data(rules, rows, fields):
     for i in range(rows):
         if i!=0:
             d.append([])
+
         for j in range(len(rules)):
-            r=str(rules[j][0]).lower()
+            r=rules[j][0]
+            r=r.lower()
 
             a=t.get(r)
             if a!="" and a!=None:
 
                 exec("d[i+1].append("+a+")")
+                print (a)
             else:
+                print (r)
                 if r=='number':
                     d[i+1].append(''.join(random.choices(string.digits, k=7)))
-                if r=='string':
-                    d[i+1].append(''.join(random.choices(string.ascii_uppercase + string.digits, k=7)))
+                if r=='randomstring':
+                    d[i+1].append(''.join(random.choices(string.ascii_lowercase + string.digits, k=10)))
+                if r=='empty':
+                    d[i+1].append('')
+                if r=='regexp':
+                    str = rstr.xeger(r)
+                    d[i+1].append(str)
+
     return d
 
 class WiseTestData:
@@ -128,17 +168,20 @@ class WiseTestData:
         if no_shuffle != "" and no_shuffle != None:
             self.no_shuffle = no_shuffle
 
+        #print (self.no_shuffle)
+
 
     def make_data(self):
         field_names = get_field_names(WiseTestData.excel, 'data')
-
         if self.no_gen=="False":
+
             data = generate_test_data(get_test_data_arr (self.excel, 'data', 0), self.rows, field_names)
             #data.insert(0, field_names)
             wb = save_gen_test_data (self.excel, 'generated', data, "a")
         else:
             wb = 'data'
 
+        res=""
         if self.no_shuffle=="False":
             field_ref_map = get_field_ref_map(self.excel, 'ref')
             resorted_fields = resort_fields(field_ref_map)
@@ -148,16 +191,16 @@ class WiseTestData:
                 skp=1
             parameters = get_test_data_arr (self.excel, wb, skp)
             new_parameters=reshufle_input(parameters, resorted_fields)
-        #else:
-        #    new_parameters=parameters
-        #print (new_parameters)
 
-        permutations = build_pairwise_permutation(new_parameters)
-        res = save_test_data (self.excel, 'WiseTD', permutations, field_names, resorted_fields, "a")
+            permutations = build_pairwise_permutation(new_parameters)
+            res = save_test_data (self.excel, 'WiseTD', permutations, field_names, resorted_fields, "a")
+        #else:
+            #new_parameters=parameters
+            #print (new_parameters)
         #print("Resulted Pairwise permuations: "+str(permutations))
         #print("Result rows#: "+str(len(permutations)))
 
         return res
 
-# runer = WiseTestData ("api", 14, 'TestData.xlsx', True, False, False)
-# runer.make_data()
+runer = WiseTestData ("api", 4, 'TestData.xlsx', "False", "False", "False")
+runer.make_data()

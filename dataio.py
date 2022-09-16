@@ -40,6 +40,7 @@ def get_field_ref_map  (file, sheet):
 
     jj = data.columns.size
     ii = int((data.size)/jj)
+    print(dd)
     c=0
 
     for i in range(ii):
@@ -57,13 +58,14 @@ def get_field_ref_map  (file, sheet):
                 dd[c].append(j)
                 dd[c].append(1)
                 c = c + 1
-    print (dd)
+    #print (dd)
     return dd
 
 def save_gen_test_data (file, sheet, data, mode):
 
     if sheet=="": sheet=1
     df = pd.DataFrame(data)
+
     if mode == "a":
         workbook = openpyxl.load_workbook(file)
         if sheet in workbook.sheetnames:
