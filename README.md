@@ -2,7 +2,7 @@
 Python app to generate test data for best coverage
 
 
-## Testing problem #1 is effective test coverage (i.e. data in use case/feature) 
+## Testing problem #1 is effective test coverage (i.e. data field permutations within a use case/feature) 
 
 This Python app uses 3 step approach to obtain optimal test data permutations
 
@@ -33,4 +33,13 @@ If you use to execute it in API mode, you will also obtain permutations (aka Wis
 - Heavy data testing including migration, ETL, etc
 - Complex business logic which requires data-driven approach to cover various paths
 - Production and pre-production testing where dynamic and various data sets needed, such as  Blue/Green, Canary, Feature-flag deployments, as well as business validation such as A/B split testing, UAT and design of experiments
+
+
+## Recommended approach to create test data based on potential defect to be uncovered:
+See it  also in "TestData approach based on potential bug.xlsx" from source files
+
+
+![image](https://user-images.githubusercontent.com/4906421/190676953-1ad8dfa8-08d0-44aa-a97d-661870e133ba.png)
+
+
 
