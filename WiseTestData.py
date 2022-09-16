@@ -3,7 +3,7 @@ from dataio import *
 import random
 import string
 import rstr
-#import api
+import api
 
 from allpairspy import AllPairs
 from faker import Faker
@@ -202,5 +202,6 @@ class WiseTestData:
 
         return res
 
-runer = WiseTestData ("api", 4, 'TestData.xlsx', "False", "False", "False")
-runer.make_data()
+#Uncomment and parametrize to use in IDE and comment #import api string to stop using API mode
+#runer = WiseTestData ("api", 4, 'TestData.xlsx', "False", "False", "False")
+#runer.make_data()
